@@ -9,9 +9,7 @@
     WHERE  uname = ? <sql:param value="${param.username}" /> 
     AND pw = ${param.password}
 </sql:query>
-
-    
-    
+   
 <c:set var="userDetails" value="${users.rows[0]}"/>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

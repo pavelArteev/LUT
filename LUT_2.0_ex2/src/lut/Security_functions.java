@@ -1,6 +1,7 @@
 package lut;
 
 import java.security.*;
+import java.util.Map;
 
 public class Security_functions {
 	
@@ -27,11 +28,10 @@ public class Security_functions {
 	
 public static void main(String[] args){
 
-
 }
 	
     //TODO
-	public boolean check_input(String input){
+	public static boolean check_input(Map<String, String[]> input_map){
 		return true;
 	}
 	
@@ -83,7 +83,9 @@ public static void main(String[] args){
 		 *     =\  t  ;=    /   /
 		 *       `--,'  .""|   /
 		 *            || |  \\ \
-		 *           ((,_|  ((,_\                _
+		 *           ((,_|  ((,_\   
+		 *  
+		 * (Ascii cat by jgs)
 		 */
 		return generate_md5(paswordz+salt);
 	}
