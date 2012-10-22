@@ -37,7 +37,8 @@
                                 </c:forEach>
                             </select>
                             <input type="submit" value="submit" />
-                        </form></td>
+                        </form>
+                    </td>
                 </tr>
             </tbody>
         </table>

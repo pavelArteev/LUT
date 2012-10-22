@@ -52,7 +52,7 @@
                             <br><br>
                             Your name: <input type="text" name="name" />
                             <br><br>
-                            <input type="submit" value="Add review" />
+                            <input type="submit" value="Add review" /></form>
                     </td>
                 </tr>
             </tbody>
