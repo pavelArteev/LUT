@@ -28,8 +28,8 @@
                         </form>
                     </td>
                 </tr>
-                <td><a href="password_reset.jsp" value="Forgot your password!">Forgot your password!</a></td>
-                <td><a href="register.jsp" value="Sing up!">Sing UP!</a></td>
+                <td><a href="forgot_password.jsp" value="Forgot your password!">Forgot your password!</a></td>
+                <td><a href="register.jsp" value="Sing up!">Sine UP!</a></td>
             </tbody>
         </table>
 		 <thead>

@@ -9,6 +9,7 @@
     pageEncoding="UTF-8"%>
             
 <% 
+	double KEY_LENGTH = 25;
 	boolean user = false;
 	boolean password = false;
 	boolean mail = false;
@@ -24,8 +25,12 @@
 		post = true;
 		mail1 = request.getParameter("mail");
 	}
+	
+
+	String randKey = UUID.randomUUID().toString();
 %>
-<rand:string id="randKey" length="25" charset="a-zA-Z0-9"/><br/>            
+
+    
             
             
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -64,13 +69,11 @@
             String result;
 
             //Get server info for email:
-            String serverURL = request.getScheme().toString() + "://" + request.getServerName().toString() + ":" + request.getServerPort().toString() + "/" + 
+            String serverURL = request.getScheme().toString() + "://" + request.getServerName().toString() + ":" + String.valueOf(request.getServerPort()) + "/" + 
                 request.getContextPath().toString();
             String verifyURL = serverURL + "/verify.jsp?user=" + uid + "&key=" + randKey;
 
-            String content = "Hello, \n 
-            Click the following link or copy it in your browser to reset your password:
-            <a href='" + verifyURL + "'>" + verifyURL + "</a>";
+            String content = "Hello,\n Click the following link or copy it in your browser to reset your password: <a href='" + verifyURL + "'>" + verifyURL + "</a>";
 
             String from = "noreply@lutproject.com";
 

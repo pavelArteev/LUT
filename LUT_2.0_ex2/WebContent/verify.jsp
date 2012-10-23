@@ -14,6 +14,7 @@
 	String pw1 ="";
  	String pw2 ="";
     String rst = "";
+    boolean post = false;
             
 
     if ("POST".equalsIgnoreCase(request.getMethod())) {
@@ -57,12 +58,12 @@
         //Verify good referral link
         if(post && !pw1.contentEquals("") && !pw2.contentEquals("") && !pw1.contentEquals(pw2)){
             out.print("<tr><td><h3>Passwords do not match! Try again!</h3></tr></td>");
-            <%= passwordForm() %>
+            passwordForm(uid, key);
         }else if(pw1.contentEquals(pw2)){
             //Set new password and remove key from database
             out.print("<tr><td><h3>Success!</h3></tr></td>");
         }else{
-            <%= passwordForm() %>
+            passwordForm(uid, key);
         }
     }else{
         out.print("<h1>Invalid Verification Link!</h1>");
@@ -77,18 +78,16 @@
 </html>
 
 <%!
-String passwordForm() {
-%>
-        <tr>
-     <td><form method="post" action="verify.jsp?uid=<%=uid%>&key=<%=key%>">
-            <p>Password:<input type="password" name="pass1" size="20"></p>
-            <p></p>
-            <p>Retype Password:<input type="password" name="pass2" size="20"></p>
-            <p></p>                    
-            <p><input type="submit" value="submit" name="login"></p>
-                </form>
-            </td>
-        </tr>
-<%
+String passwordForm(String uid, String key) {
+	return "<tr>" +
+		     "<td><form method='post' action='verify.jsp?uid="+uid+"&key="+key+"'>" +
+	            "<p>Password:<input type='password' name='pass1' size='20'></p>"+
+	            "<p></p>"+
+	            "<p>Retype Password:<input type='password' name='pass2' size='20'></p>"+
+	            "<p></p>"+             
+	            "<p><input type='submit' value='submit' name='login'></p>"+
+	                "</form>"+
+	            "</td>"+
+	        "</tr>";
 }
 %>

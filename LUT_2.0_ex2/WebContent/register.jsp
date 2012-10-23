@@ -4,6 +4,7 @@
 <%@ page import="java.io.*,java.util.*,javax.mail.*"%>
 <%@ page import="javax.mail.internet.*,javax.activation.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
+<%@ page import="javax.annotation.Resource" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -28,8 +29,8 @@
 		mail1 = request.getParameter("mail");
 		mail2 = request.getParameter("mail2");
 	}
-%>
-<rand:string id="randKey" length="25" charset="a-zA-Z0-9"/><br/>            
+	String randKey = UUID.randomUUID().toString();
+%>          
             
             
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -70,57 +71,22 @@
 			// Adding User to Table 
 			//TODO also we must to add verification if we have no the same username or email
 			// then add user to temp db and send to him email with confirmation
-            out.print(randKey);
-			out.print(uname+pw1+pw2+mail1+mail2);
+            //out.print(randKey);
+			//out.print(uname+pw1+pw2+mail1+mail2);
             int uid = 1;
 
 
-            String result;
+           
 
             //Get server info for email:
-            String serverURL = request.getScheme().toString() + "://" + request.getServerName().toString() + ":" + request.getServerPort().toString() + "/" + 
+            String serverURL = request.getScheme().toString() + "://" + request.getServerName().toString() + ":" + String.valueOf(request.getServerPort()) + "/" + 
                 request.getContextPath().toString();
             String verifyURL = serverURL + "/verify.jsp?user=" + uid + "&key=" + randKey + "&rst=0";
 
-            String content = "Welcome to LUT, \n 
-            Click the following link or copy it in your browser to verify your email:
-            <a href='" + verifyURL + "'>" + verifyURL + "</a>";
-
-            String from = "noreply@lutproject.com";
-
-            // Assuming you are sending email from localhost
-            String host = "localhost";
-
-            // Get system properties object
-            Properties properties = System.getProperties();
-
-            // Setup mail server
-            properties.setProperty("mail.smtp.host", host);
-
-            // Get the default Session object.
-            Session mailSession = Session.getDefaultInstance(properties);
-
-            try{
-                // Create a default MimeMessage object.
-                MimeMessage message = new MimeMessage(mailSession);
-                // Set From: header field of the header.
-                message.setFrom(new InternetAddress(from));
-                // Set To: header field of the header.
-                message.addRecipient(Message.RecipientType.TO,
-                                       new InternetAddress(mail1));
-                // Set Subject: header field
-                message.setSubject("LUT: Verify Your Email");
-                // Now set the actual message
-                message.setText(content);
-                // Send message
-                Transport.send(message);
-                result = "Check your email! Before you can use LUT you have to conferm your email address";
-            }catch (MessagingException mex) {
-                mex.printStackTrace();
-                result = "Error: unable to register... Please try again!";
-            }
-
-            out.print(result);
+            String content = "Welcome to LUT, \n Click the following link or copy it in your browser to verify your email: <a href='" + verifyURL + "'>" + verifyURL + "</a>";
+            
+            SendEmail email = new SendEmail();
+            email.sendMessage(mail1, content);
 		}
    	}
 %>
@@ -153,3 +119,28 @@
 
 </body>
 </html>
+
+<%! 
+public class SendEmail {
+  @Resource(name = "mail/group8")
+  private Session mailSession;
+
+  public String sendMessage(String email, String message) {
+	  String result = "";
+	  Message msg = new MimeMessage(mailSession);
+	    try {
+	      msg.setSubject("LUT: Verify Your Email");
+	      msg.setRecipient(Message.RecipientType.TO,
+	              new InternetAddress(email));
+	      msg.setText(message);
+	      Transport.send(msg);
+	      result = "Check your email! You have been sent a password reset link";
+	    }
+	    catch(MessagingException me) {
+   		  me.printStackTrace();
+          result = "Error: unable to send email... Please try again!";
+	    }
+	   return result;
+  }
+}
+%>
