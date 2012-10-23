@@ -1,6 +1,30 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<% 
+   String sid = "";
+   String username = "";
+   String ip = request.getRemoteAddr();
+   Cookie[] cs = request.getCookies();
+   for (Cookie c: cs){
+	   if (c.getName().equals("lutsid")) 
+		   sid = c.getValue(); 
+	   if (c.getName().equals("username"))
+		   username = c.getValue();
+   }
+%>
+
+<sql:query var="user" dataSource="jdbc/lut2">
+    SELECT * FROM users where name = '<%=username %>' 
+    	and session_id = '<%=sid %>' and ip = '<%=ip %>'
+</sql:query>
+
+<c:choose>
+	<c:when test="${empty user.rows[0]}">
+		<% 	           response.setHeader("Refresh", "0; URL=expired.jsp"); %> 
+ 	</c:when>
+</c:choose>
+
 
 <sql:query var="school" dataSource="jdbc/lut2">
     SELECT * FROM country, school
