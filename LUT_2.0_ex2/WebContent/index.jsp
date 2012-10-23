@@ -1,6 +1,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
+
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -19,7 +21,7 @@
             </thead>
             <tbody>
 				<tr>
-                    <td><form method="post" action="countries.jsp">
+                    <td><form method="post" action="userlogin.jsp">
                             <p>Username:</font><input type="text" name="username" size="20"></p>
                             <p>Password:</font><input type="password" name="password" size="20"></p>
                             <p><input type="submit" value="submit" name="login"></p>
