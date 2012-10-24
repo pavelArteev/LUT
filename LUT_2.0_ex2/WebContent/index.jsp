@@ -2,6 +2,11 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
 
+<%@page import="lut.Security_functions" %>
+<% 
+   if(! Security_functions.check_input(request.getParameterMap())){
+	   response.setHeader("Refresh", "0; URL=badinput.jsp");
+   }else{ %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -39,3 +44,4 @@
         </thead>
     </body>
 </html>
+<% } %>

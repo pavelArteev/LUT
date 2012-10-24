@@ -8,8 +8,13 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+<%@page import="lut.Security_functions" %>
             
 <% 
+   if(! Security_functions.check_input(request.getParameterMap())){
+	   response.setHeader("Refresh", "0; URL=badinput.jsp");
+   }else{
 	boolean user = false;
 	boolean password = false;
 	boolean mail = false;
@@ -127,7 +132,6 @@
 
 
 
-
 <%!
 
 //	up JavaMail session on your localhost
@@ -174,3 +178,4 @@ public class SendEmail{
 }
 %>
 
+<%} %>

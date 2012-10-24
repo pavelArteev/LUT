@@ -1,7 +1,13 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+
+<%@page import="lut.Security_functions" %>
+            
 <% 
+   if(! Security_functions.check_input(request.getParameterMap())){
+	   response.setHeader("Refresh", "0; URL=badinput.jsp");
+   }else{
    String sid = "";
    String username = "";
    String ip = request.getRemoteAddr();
@@ -79,3 +85,4 @@
         </c:forEach>
     </body>
 </html>
+<% } %>

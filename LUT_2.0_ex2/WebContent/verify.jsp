@@ -8,7 +8,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
             
+
+<%@page import="lut.Security_functions" %>
+            
 <% 
+   if(! Security_functions.check_input(request.getParameterMap())){
+	   response.setHeader("Refresh", "0; URL=badinput.jsp");
+   }else{
     String uid = "";
     String key = "";
 	String pw1 ="";
@@ -97,3 +103,4 @@ String passwordForm(String uid, String key) {
 	        "</tr>";
 }
 %>
+<% } %>

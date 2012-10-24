@@ -1,6 +1,11 @@
-
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%@page import="lut.Security_functions" %>
+<% 
+   if(! Security_functions.check_input(request.getParameterMap())){
+	   response.setHeader("Refresh", "0; URL=badinput.jsp");
+   }else{
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -31,3 +36,4 @@
         </table>
     </body>
 </html>
+<% } %>
