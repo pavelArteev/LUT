@@ -13,22 +13,13 @@ String password = request.getParameter("password");
 String pw_hash = Security_functions.i_can_haz_salty_md5sum(password);
 
 %>
-<c:choose>
-	<c:when test="${ empty param.username}">
-        No Username
-	</c:when>
-	<c:when test="${ empty param.password}">
-		No Password
-	</c:when>
-	<c:otherwise>
+
   		<sql:query var="users" dataSource="jdbc/lut2">
 				SELECT * FROM users
 				WHERE  name = '<%=user%>'
 				AND password = '<%=pw_hash %>'
 		</sql:query>
 		<c:set var="userDetails" value="${users.rows[0]}"/>
-	</c:otherwise>
-</c:choose>
 
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -37,16 +28,26 @@ String pw_hash = Security_functions.i_can_haz_salty_md5sum(password);
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="lutstyle.css">
+
 <title>LUT - Login</title>
 </head>
 <body>
 <c:choose>
             <c:when test="${empty userDetails}">
-                Login failed
+                <h1>Login failed</h1>
+                <table>
+            <thead>
+                <tr>
+                    <th>Please go <a href="index.jsp">back</a></th></tr></thead><tbody></tbody></table>
             </c:when>
             <c:otherwise>
             	<h1> Welcome <%=user%> </h1>
-            	You will be redirected in a few seconds. :)
+            	  <table>
+            <thead>
+                <tr>
+                    <th>
+            	You will be redirected in a few seconds. :)</th></tr></thead><tbody></tbody></table>
  <%            	String ip = request.getRemoteAddr();
    				String sid = Security_functions.create_sid(user);     %>     	
             	

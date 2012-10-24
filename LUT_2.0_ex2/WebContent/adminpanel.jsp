@@ -13,9 +13,6 @@
 	String password = request.getParameter("password");
 	String site = request.getParameter("site");
 
-	if (!Security_functions.check_input(request.getParameterMap()))
-		System.out.print("EVIL INPUT!");
-
 	String pw_hash = Security_functions
 			.i_can_haz_salty_md5sum(password);
 %>
@@ -39,7 +36,12 @@
 <body>
 	<c:choose>
 		<c:when test="${ empty userDetails }">
-                Login failed
+                <h1>Login failed</h1>
+                <table>
+            <thead>
+                <tr>
+                    <th>Please go <a href="lutadmin.jsp">back</a></th></tr></thead><tbody></tbody></table>
+       
             </c:when>
 		<c:otherwise>
 
@@ -49,38 +51,38 @@
 				Welcome
 				<%=user%>
 			</h1>
-
-			<br />
+	<table><thead><tr>
+			<th>
 			<form method="post" action="adminpanel.jsp?site=admin_countries">
 				<input type="hidden" name="username" value="<%=user%>" /> <input
 					type="hidden" name="password" value="<%=password%>" /> <input
 					type="submit" value="Add/remove countries" />
-			</form>
+			</form></th>
 
-
+<th>
 			<form method="post" action="adminpanel.jsp?site=admin_schools">
 				<input type="hidden" name="username" value="<%=user%>" /> <input
 					type="hidden" name="password" value="<%=password%>" /> <input
 					type="submit" value="Add/remove schools" />
-			</form>
-
+			</form></th>
+<th>
 			<form method="post" action="adminpanel.jsp?site=admin_reviews">
 				<input type="hidden" name="username" value="<%=user%>" /> <input
 					type="hidden" name="password" value="<%=password%>" /> <input
 					type="submit" value="Manage reviews" />
 			</form>
-
+</th><th>
 			<form method="post" action="adminpanel.jsp?site=admin_users">
 				<input type="hidden" name="username" value="<%=user%>" /> <input
 					type="hidden" name="password" value="<%=password%>" /> <input
 					type="submit" value="Manage User" />
-			</form>
-
+			</form></th>
+<th>
 			<form method="post" action="index.jsp">
 				<input type="submit" value="Logout" />
-			</form>
+			</form></th> </tr></thead></table>
+		
 			<c:choose>
-
 				<c:when test="${param.site== 'index'}">
 		Select what you want to do. 
 	</c:when>
@@ -91,9 +93,11 @@
 </sql:query>
 					<sql:query var="country" dataSource="jdbc/lut2">
     SELECT * FROM country
-</sql:query>
+</sql:query><hr>
+<table><thead><tr><h1>Manage Schools</h1></tr></thead><tbody><tr><td>
+
 					<form method="post" action="adminpanel.jsp?site=add_school">
-						<strong>Add new school:</strong>
+					<strong>Add new school:</strong>
 						<p>
 							Full name:<input type="text" name="full_name" size="50">
 						</p>
@@ -123,7 +127,7 @@
 						<p>
 							<input type="submit" value="submit" />
 						</p>
-					</form>
+					</form></td></tr></tbody></table>
 					<hr>
 					<strong>List of all schools:</strong>
 					<table>
@@ -181,7 +185,7 @@ School succesfull deleted!
 					<sql:query var="country" dataSource="jdbc/lut2">
     SELECT * FROM country
 </sql:query>
-					<h1>Manage reviews!</h1>
+					<h1>Manage reviews!</h1><hr>
 					<table border="0">
 						<tbody>
 							<tr>
@@ -252,11 +256,10 @@ Review deleted!
 					<sql:query var="country" dataSource="jdbc/lut2">
     SELECT * FROM country
 </sql:query>
-
+<hr>
+<table><thead><tr>
 					<h1>Manage countries</h1>
-					<br />
-					<hr>
-					<form method="post" action="adminpanel.jsp?site=add_country">
+</tr></thead><tbody><tr><td>					<form method="post" action="adminpanel.jsp?site=add_country">
 						<strong>Add new country:</strong>
 						<p>
 							Short name:<input type="text" name="short_name" size="3">
@@ -270,7 +273,7 @@ Review deleted!
 						<p>
 							<input type="submit" value="submit" name="login">
 						</p>
-					</form>
+					</form></td></tr></tbody></table>
 					<hr>
 					<strong>List of all countries:</strong>
 					<table>
@@ -281,8 +284,9 @@ Review deleted!
 										action="adminpanel.jsp?site=delete_country">
 										<input type="hidden" name="country" value="${row[1]}">
 										<input type="hidden" name="country_sh" value="${row[0]}">
-										<input type="hidden" name="username" value="<%=user%>" /> <input
-											type="hidden" name="password" value="<%=password%>" /> <input
+										<input type="hidden" name="username" value="<%=user%>"> 
+										<input
+											type="hidden" name="password" value="<%=password%>"> <input
 											type="submit" value="Delete country!">
 									</form></td>
 							</tr>
@@ -329,13 +333,15 @@ Country added!
 							<br>
 						</c:when>
 						<c:otherwise>
-							<strong>Menage users:</strong>
+							<strong>Manage users:</strong>
 							<form method="post" action="adminpanel.jsp?site=add_user">
 								<strong>Add new User:</strong>
+									<input type="hidden" name="username" value="<%=user%>" /> <input
+											type="hidden" name="password" value="<%=password%>" /> 
 								<p>Name:<input type="text" name="name" size="3"></p>
 						        <p>Email:<input type="text" name="email" size="20"></p>
-						        <p>Password:<input type="password" name="pass" size="20"></p>
-						        <p><input type="submit" value="submit" name="login"></p>
+						        <p>Password:<input type="userpassword" name="pass" size="20"></p>
+						        <p><input type="submit" value="submit"></p>
 						    </form>
 						    <hr>
 							<strong>List of all users:</strong>
@@ -344,12 +350,16 @@ Country added!
 									<tr> 
 						 			<td><c:out value="${row[1]}"/></td> 
 						 			<td><form action="admin_edit_user.jsp">
+						 				<input type="hidden" name="username" value="<%=user%>" /> <input
+											type="hidden" name="password" value="<%=password%>" /> 
 						 				<input type="hidden" name="uid" value="${row[0]}">
 						 				<input type="submit" value="Edit!">
 						 			</form></td></tr>
 						 			<tr> 
 						 			<td><c:out value="${row[1]}"/> | <c:out value="${row[4]}"/></td> 
 						 			<td><form action="adminpanel.jsp?site=delete_user">
+						 				<input type="hidden" name="username" value="<%=user%>" /> <input
+											type="hidden" name="password" value="<%=password%>" /> 
 						 				<input type="hidden" name="uid" value="${row[0]}">
 						 				<input type="submit" value="Delete!">
 						 			</form></td></tr>
@@ -368,7 +378,7 @@ Country added!
 					User added!
 				</c:when>
 
-				<c:when test="${param.site== 'delete_user}">
+				<c:when test="${param.site== 'delete_user'}">
 					<sql:transaction dataSource="jdbc/lut2">
 						<sql:update var="count">
 					    	DELETE FROM users WHERE user_id='${param.uid}'
@@ -396,7 +406,6 @@ Specified Site not found. :(
 			</c:choose>
 		</c:otherwise>
 	</c:choose>
-
 </body>
 </html>
 <% } %>
