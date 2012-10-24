@@ -15,8 +15,6 @@ String pw_hash = Security_functions.i_can_haz_salty_md5sum(password);
 <c:choose>
 	<c:when test="${ empty param.username}">
         No Username
-         <%=password %>
-        <%=pw_hash %>
 	</c:when>
 	<c:when test="${ empty param.password}">
 		No Password
@@ -24,13 +22,13 @@ String pw_hash = Security_functions.i_can_haz_salty_md5sum(password);
 	<c:otherwise>
   		<sql:query var="users" dataSource="jdbc/lut2">
 				SELECT * FROM users
-				WHERE  name = "<%=user%>"
-				AND password = "<%=pw_hash %>"
+				WHERE  name = '<%=user%>'
+				AND password = '<%=pw_hash %>'
 		</sql:query>
 		<c:set var="userDetails" value="${users.rows[0]}"/>
 	</c:otherwise>
 </c:choose>
-<%   %>
+
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -38,13 +36,10 @@ String pw_hash = Security_functions.i_can_haz_salty_md5sum(password);
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>LUT - Login</title>
 </head>
 <body>
 <c:choose>
-
-
-
             <c:when test="${empty userDetails}">
                 Login failed
             </c:when>
@@ -63,6 +58,7 @@ String pw_hash = Security_functions.i_can_haz_salty_md5sum(password);
             	</sql:transaction>
             	
 	           <% 
+	           
 	           Cookie cid = new Cookie("lutsid", sid);
 	           Cookie cname = new Cookie("username", user);
 			   cname.setMaxAge(60*30);
