@@ -351,7 +351,6 @@ Country added!
 						 			</form></td></tr>
 						    </c:forEach>
 							</table>
-							</c:forEach>
 						</c:otherwise>
 					</c:choose>
 				</c:when>

@@ -111,11 +111,6 @@
                             <p>Email:<input type="text" name="mail" value="<%=mail1%>" size="20"></p>
                             <p></p>
                             <p>Retype Email:<input type="text" name="mail2" value="<%=mail2%>" size="20"></p>
-                            <p></p>
-             <!--           <p>Security Question:<input type="password" name="password" size="20"></p>
-                            <p></p>
-                            <p>Answer:<input type="password" name="password" size="20"></p>
-                            <p></p> -->
                             
                             <p><input type="submit" value="submit" name="login"></p>
                         </form>

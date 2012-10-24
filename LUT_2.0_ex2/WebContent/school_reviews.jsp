@@ -75,8 +75,7 @@
                             <textarea name="review" rows=10 cols=60 wrap="physical" autofocus="on" > 
                             </textarea>
                             <br><br>
-                            Your name: <input type="text" name="name" />
-                            <br><br>
+                      
                             <input type="submit" value="Add review" /></form>
                     </td>
                 </tr>
