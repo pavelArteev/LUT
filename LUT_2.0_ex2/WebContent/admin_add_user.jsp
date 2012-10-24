@@ -1,9 +1,10 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+
 <sql:transaction dataSource="jdbc/lut2">
-    <sql:update var="count">
-    	DELETE FROM users WHERE user_id='${param.uid}'
+    <sql:update var="users">
+        INSERT INTO country VALUES ('${param.name}','${param.pass}' , NULL, ,'${param.email}', NULL,'${param.key}')
     </sql:update>
 </sql:transaction>
 
@@ -13,9 +14,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Delete User</title>
+<title>Insert title here</title>
 </head>
 <body>
-	<c:redirect url="admin_users.jsp" />
+    <c:redirect url="admin_users.jsp" />
 </body>
 </html>
