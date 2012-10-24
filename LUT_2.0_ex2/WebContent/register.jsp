@@ -1,7 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
-<%@ page import="java.io.*,java.util.*,javax.mail.*"%>
+<%@ page import="java.io.*,java.util.*,javax.mail.*, javax.naming.*, com.sun.mail.smtp.*"%>
 <%@ page import="javax.mail.internet.*,javax.activation.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 <%@ page import="javax.annotation.Resource" %>
@@ -75,7 +75,7 @@
 			//out.print(uname+pw1+pw2+mail1+mail2);
             int uid = 1;
 
-
+            //INSERT INTO users email, encripted(pass), key
            
 
             //Get server info for email:
@@ -83,10 +83,43 @@
                 request.getContextPath().toString();
             String verifyURL = serverURL + "/verify.jsp?user=" + uid + "&key=" + randKey + "&rst=0";
 
-            String content = "Welcome to LUT, \n Click the following link or copy it in your browser to verify your email: <a href='" + verifyURL + "'>" + verifyURL + "</a>";
+            String message = "Welcome to LUT, \n Click the following link or copy it in your browser to verify your email: <a href='" + verifyURL + "'>" + verifyURL + "</a>";
             
+            out.print("Trying to send email...");
             SendEmail email = new SendEmail();
-            email.sendMessage(mail1, content);
+            email.sendMessage(mail1, message);
+            //MailService email = new MailService();
+            //email.sendMessage(mail1, message);
+
+            //asadmin --user admin create-javamail-resource --mailhost="smtp.gmail.com" --mailuser="group8.lut@gmail.com" --fromaddress="group8.lut@gmail.com" --debug="false" --enabled="true" --description="A new JavaMail Session!" --property="mail.smtp.password=getc0ins:mail.smtp.auth=true:mail.smtp.port=465:mail.smtp.socketFactory.fallback=false:mail.smtp.socketFactory.port=465:mail.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory" "mail/newsession"
+
+            //In order for mail to work we need an SMTP server
+            //$: sudo apt-get install postfix
+            /*
+            try{
+                Session mailSession = Session.getInstance(System.getProperties());
+                Transport transport = new SMTPTransport(mailSession,new URLName("localhost"));
+                transport.connect("localhost",25,null,null);
+                MimeMessage m = new MimeMessage(mailSession);
+                m.setFrom(new InternetAddress(%><%request.getParameter("noreply@lut.com")%><%));
+                Address[] toAddr = new InternetAddress[] {
+                    new InternetAddress(%><%request.getParameter(mail1)%><%)
+                };
+                m.setRecipients(javax.mail.Message.RecipientType.TO, toAddr);
+                m.setSubject(%><%request.getParameter("LUT: Verify your email")%><%);
+                m.setSentDate(new java.util.Date());
+                m.setContent(%><%request.getParameter(message)%><%, "text/html");
+                transport.sendMessage(m,m.getAllRecipients());
+                transport.close();
+                out.println("Check your email and you'll be good to go!");
+            }catch(Exception e){
+                out.print("Error: ");
+                out.println(e.getMessage());
+                e.printStackTrace();
+            }
+            */
+
+
 		}
    	}
 %>
@@ -134,13 +167,42 @@ public class SendEmail {
 	              new InternetAddress(email));
 	      msg.setText(message);
 	      Transport.send(msg);
-	      result = "Check your email! You have been sent a password reset link";
+	      result = "Check your email! You have been sent a comfermation link";
 	    }
-	    catch(MessagingException me) {
-   		  me.printStackTrace();
+	    catch(Exception e) {
+   		  //e.printStackTrace();
           result = "Error: unable to send email... Please try again!";
 	    }
 	   return result;
   }
 }
+%>
+
+<%!
+/*
+public class MailService {  
+    public String sendMissage(String email, String message){  
+        String result = "";
+        String myEmailId = "group8.lut@gmail.com";
+        String myPassword = "getc0ins";
+        try {
+            MultiPartEmail email = new MultiPartEmail();
+            email.setSmtpPort(587);
+            email.setAuthenticator(new DefaultAuthenticator(myEmailId, myPassword));
+            email.setDebug(true);
+            email.setHostName("smtp.gmail.com");
+            email.setFrom(myEmailId);
+            email.setSubject("LUT: Verify Your Email");
+            email.setMsg(message);
+            email.addTo(email);
+            email.setTLS(true);
+            email.send();
+            result = "Check your email! You have been sent a comfermation reset link";
+        } catch (Exception e) {
+            result = "Crap: " + e;
+        }
+        return result;
+    }   
+}  
+*/
 %>

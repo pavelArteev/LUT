@@ -61,6 +61,12 @@
             passwordForm(uid, key);
         }else if(pw1.contentEquals(pw2)){
             //Set new password and remove key from database
+            //GET * FROM users WHERE uid = "$uid" AND key = "$key"
+
+            //IF empty 
+            // out.print("<tr><td><h3>FAIL :(</h3></tr></td>");
+            //Else
+            //INSERT pass1 into password WHERE uid = "$uid" AND key = "$key"
             out.print("<tr><td><h3>Success!</h3></tr></td>");
         }else{
             passwordForm(uid, key);
