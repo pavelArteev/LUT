@@ -3,12 +3,13 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%@page import="lut.Security_functions" %>
-
 <% 
+   if(! Security_functions.check_input(request.getParameterMap())){
+	   response.setHeader("Refresh", "0; URL=badinput.jsp");
+   }else{
+
 String user = request.getParameter("username");
 String password = request.getParameter("password");
-  if(!Security_functions.check_input(request.getParameterMap())) System.out.print("EVIL INPUT!");
-
 String pw_hash = Security_functions.i_can_haz_salty_md5sum(password);
 
 %>
@@ -70,3 +71,5 @@ String pw_hash = Security_functions.i_can_haz_salty_md5sum(password);
         </c:choose>
 </body>
 </html>
+
+<%} %>

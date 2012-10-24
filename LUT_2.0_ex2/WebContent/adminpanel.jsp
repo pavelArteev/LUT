@@ -4,7 +4,11 @@
 
 <%@page import="lut.Security_functions"%>
 
-<%
+
+<% 
+   if(! Security_functions.check_input(request.getParameterMap())){
+	   response.setHeader("Refresh", "0; URL=badinput.jsp");
+   }else{
 	String user = request.getParameter("username");
 	String password = request.getParameter("password");
 	String site = request.getParameter("site");
@@ -395,3 +399,4 @@ Specified Site not found. :(
 
 </body>
 </html>
+<% } %>

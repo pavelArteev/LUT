@@ -1,6 +1,11 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-		<% 	           response.setHeader("Refresh", "5; URL=index.jsp"); %> 
+
+<%@page import="lut.Security_functions" %>
+<% 
+   if(! Security_functions.check_input(request.getParameterMap())){
+	   response.setHeader("Refresh", "0; URL=badinput.jsp");
+   }else{  response.setHeader("Refresh", "5; URL=index.jsp"); %> 
 
 
 
@@ -24,3 +29,4 @@
  
     </body>
 </html>
+<% } %>

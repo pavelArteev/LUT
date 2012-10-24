@@ -1,6 +1,8 @@
 package lut;
 
 import java.security.*;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class Security_functions {
@@ -23,16 +25,48 @@ public class Security_functions {
 			"E0","E1","E2","E3","E4","E5","E6","E7","E8","E9","EA","EB","EC","ED","EE","EF",
 			"F0","F1","F2","F3","F4","F5","F6","F7","F8","F9","FA","FB","FC","FD","FE","FF"};
 
+	
+	
 	static private String salt = "1337lut_salt";
 	
+	static private char[] whitelist = {
+		'a','b','c','d','e','f','g','h','i','j','l','m','o','p','q','r','s','t','u','v','w','x','y','z',
+		'1','2','3','4','5','6','7','8','9','0',
+		'!','\'','§','%','&','/','(',')','=','?',
+		'+','*','-','#',
+		':','.','~','@',' '
+		
+	};
 	
-public static void main(String[] args){
+	
+	public synchronized static boolean check_input(Map<String, String[]> input_map){
+		Iterator<String> it = input_map.keySet().iterator();
+		String[] keys = {};
+		boolean flag = false;
+		while(it.hasNext()){
+			String k = (String) it.next();
+			keys = input_map.get(k);
+			for(int i=0; i<k.length();i++){
+				for(int j=0; j<whitelist.length;j++)
+					if(k.charAt(i) == whitelist[j] )
+						flag = true;
+			if((!flag) && (k.length()>0)) return false;}
+			flag = false;
+			for(int l=0;l<keys.length;l++){
+				String v = keys[l];
+				for(int i=0; i<v.length();i++){
+					for(int j=0; j<whitelist.length;j++)
+						if(v.charAt(i) == whitelist[j] )
+							flag = true;
+				if((!flag)) return false;
+				flag = false;}
+			}
+			
 
-}
-	
-    //TODO
-	public static boolean check_input(Map<String, String[]> input_map){
-		return true;
+			
+		}
+			return	true;
+		 
 	}
 	
 	
