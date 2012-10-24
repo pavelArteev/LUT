@@ -26,14 +26,14 @@
 	<strong>List of all countries:</strong>
 	<table>
 		<c:forEach var="row" items="${country.rowsByIndex}">
-           			<tr> 
-           			<td><c:out value="${row[1]}"/></td> 
-           			<td><form action="admin_delete_country.jsp">
-           				<input type="hidden" name="country" value="${row[1]}">
-           				<input type="hidden" name="country_sh" value="${row[0]}">
-           				<input type="submit" value="Delete country!">
-           			</form></td></tr>
-     	 </c:forEach>
+ 			<tr> 
+ 			<td><c:out value="${row[1]}"/></td> 
+ 			<td><form action="admin_delete_country.jsp">
+ 				<input type="hidden" name="country" value="${row[1]}">
+ 				<input type="hidden" name="country_sh" value="${row[0]}">
+ 				<input type="submit" value="Delete country!">
+ 			</form></td></tr>
+    </c:forEach>
 	</table>
 </body>
 </html>
