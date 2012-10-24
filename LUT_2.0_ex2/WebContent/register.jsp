@@ -15,11 +15,11 @@
 	boolean mail = false;
 	boolean captcha = false;
 	boolean post = false;
-	String uname ="pablo";
-	String pw1 ="123";
- 	String pw2 ="123";
-	String mail1 ="pavel.arteev@gmail.com";
-	String mail2 ="pavel.arteev@gmail.com";
+	String uname ="";
+	String pw1 ="";
+ 	String pw2 ="";
+	String mail1 ="";
+	String mail2 ="";
             
 	if ("POST".equalsIgnoreCase(request.getMethod())) {
 		post = true;
