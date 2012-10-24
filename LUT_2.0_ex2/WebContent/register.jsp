@@ -15,11 +15,11 @@
 	boolean mail = false;
 	boolean captcha = false;
 	boolean post = false;
-	String uname ="";
-	String pw1 ="";
- 	String pw2 ="";
-	String mail1 ="";
-	String mail2 ="";
+	String uname ="pablo";
+	String pw1 ="123";
+ 	String pw2 ="123";
+	String mail1 ="pavel.arteev@gmail.com";
+	String mail2 ="pavel.arteev@gmail.com";
             
 	if ("POST".equalsIgnoreCase(request.getMethod())) {
 		post = true;
@@ -44,15 +44,8 @@
     </head>
 <body>
    <h1>Hi student!</h1>
-        <table border="0">
-            <thead>
-                <tr>
-                    <th>Please provide the following information</th>
-                </tr>
-            </thead>
-            <tbody>
-            
-<%
+   
+   <%
 	//Verify the POST data 
 	if (post) {
 		if(uname.contentEquals("")){
@@ -83,46 +76,29 @@
                 request.getContextPath().toString();
             String verifyURL = serverURL + "/verify.jsp?user=" + uid + "&key=" + randKey + "&rst=0";
 
-            String message = "Welcome to LUT, \n Click the following link or copy it in your browser to verify your email: <a href='" + verifyURL + "'>" + verifyURL + "</a>";
+            String verificationMessage = "Welcome to LUT, \n Click the following link or copy it in your browser to verify your email: "+ verifyURL;
             
-            out.print("Trying to send email...");
-            SendEmail email = new SendEmail();
-            email.sendMessage(mail1, message);
-            //MailService email = new MailService();
-            //email.sendMessage(mail1, message);
-
-            //asadmin --user admin create-javamail-resource --mailhost="smtp.gmail.com" --mailuser="group8.lut@gmail.com" --fromaddress="group8.lut@gmail.com" --debug="false" --enabled="true" --description="A new JavaMail Session!" --property="mail.smtp.password=getc0ins:mail.smtp.auth=true:mail.smtp.port=465:mail.smtp.socketFactory.fallback=false:mail.smtp.socketFactory.port=465:mail.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory" "mail/newsession"
-
-            //In order for mail to work we need an SMTP server
-            //$: sudo apt-get install postfix
-            /*
-            try{
-                Session mailSession = Session.getInstance(System.getProperties());
-                Transport transport = new SMTPTransport(mailSession,new URLName("localhost"));
-                transport.connect("localhost",25,null,null);
-                MimeMessage m = new MimeMessage(mailSession);
-                m.setFrom(new InternetAddress(%><%request.getParameter("noreply@lut.com")%><%));
-                Address[] toAddr = new InternetAddress[] {
-                    new InternetAddress(%><%request.getParameter(mail1)%><%)
-                };
-                m.setRecipients(javax.mail.Message.RecipientType.TO, toAddr);
-                m.setSubject(%><%request.getParameter("LUT: Verify your email")%><%);
-                m.setSentDate(new java.util.Date());
-                m.setContent(%><%request.getParameter(message)%><%, "text/html");
-                transport.sendMessage(m,m.getAllRecipients());
-                transport.close();
-                out.println("Check your email and you'll be good to go!");
-            }catch(Exception e){
-                out.print("Error: ");
-                out.println(e.getMessage());
-                e.printStackTrace();
-            }
-            */
-
-
-		}
+            out.println("Trying to send email...");
+            
+            SendEmail sendEmail = new SendEmail();
+            out.println(sendEmail.sendMessage(mail1, verificationMessage));
+            
+            response.setHeader("Refresh", "5; URL=index.jsp");
+            
+            return;
+            
+ 		}
    	}
 %>
+        <table border="0">
+            <thead>
+                <tr>
+                    <th>Please provide the following information</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+
  			
 				<tr>
              <td><form method="post" action="register.jsp">
@@ -153,56 +129,53 @@
 </body>
 </html>
 
-<%! 
-public class SendEmail {
-  @Resource(name = "mail/group8")
-  private Session mailSession;
 
-  public String sendMessage(String email, String message) {
-	  String result = "";
-	  Message msg = new MimeMessage(mailSession);
-	    try {
-	      msg.setSubject("LUT: Verify Your Email");
-	      msg.setRecipient(Message.RecipientType.TO,
-	              new InternetAddress(email));
-	      msg.setText(message);
-	      Transport.send(msg);
-	      result = "Check your email! You have been sent a comfermation link";
-	    }
-	    catch(Exception e) {
-   		  //e.printStackTrace();
-          result = "Error: unable to send email... Please try again!";
-	    }
-	   return result;
-  }
+
+
+
+<%!
+
+//	up JavaMail session on your localhost
+//	asadmin --user admin create-javamail-resource --mailhost="smtp.gmail.com" --mailuser="group8.lut@gmail.com" --fromaddress="group8.lut@gmail.com" --debug="false" --enabled="true" --description="A new JavaMail Session!" --property="mail.smtp.password=getc0ins:mail.smtp.auth=true:mail.smtp.port=465:mail.smtp.socketFactory.fallback=false:mail.smtp.socketFactory.port=465:mail.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory" "mail/newsession"
+//	group8.lut@gmail.com
+//	getc0ins
+
+/**
+* Simple Class for sending email
+*/
+public class SendEmail{
+	
+	
+	public String sendMessage(String email, String message) {
+		String returnResult = "";
+		  
+		try{
+			InitialContext ctx = new InitialContext();  
+			Session session =  
+				(Session) ctx.lookup("mail/newsession");  
+			Message emailMessage = new MimeMessage(session);
+	
+			emailMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email, false));
+	
+			// Set the message's subject
+			emailMessage.setSubject("Confirmation user account");
+			// Insert the message's body
+			emailMessage.setText(message);
+			// Set header
+			emailMessage.setHeader("LUT_2.0", "Lut");
+	        // Adjust the date of sending the message
+	        Date timeStamp = new Date();
+	        emailMessage.setSentDate(timeStamp);
+
+	        // Use the 'send' static method of the Transport
+			// class to send the message
+          	Transport.send(emailMessage);
+          
+          	return "Send email - OK Check your email for confirmation =)";
+		 }catch(Exception e){
+			 return "Send email - Error \n Please try again latter =/"; 
+		 }
+	  }
 }
 %>
 
-<%!
-/*
-public class MailService {  
-    public String sendMissage(String email, String message){  
-        String result = "";
-        String myEmailId = "group8.lut@gmail.com";
-        String myPassword = "getc0ins";
-        try {
-            MultiPartEmail email = new MultiPartEmail();
-            email.setSmtpPort(587);
-            email.setAuthenticator(new DefaultAuthenticator(myEmailId, myPassword));
-            email.setDebug(true);
-            email.setHostName("smtp.gmail.com");
-            email.setFrom(myEmailId);
-            email.setSubject("LUT: Verify Your Email");
-            email.setMsg(message);
-            email.addTo(email);
-            email.setTLS(true);
-            email.send();
-            result = "Check your email! You have been sent a comfermation reset link";
-        } catch (Exception e) {
-            result = "Crap: " + e;
-        }
-        return result;
-    }   
-}  
-*/
-%>
