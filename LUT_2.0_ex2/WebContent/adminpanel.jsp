@@ -314,8 +314,75 @@ Country added!
 
 
 				<c:when test="${param.site== 'admin_users'}">
-			To be implemented
-		</c:when>
+				<sql:query var="users" dataSource="jdbc/lut2">
+				    SELECT * FROM users
+				</sql:query>
+					<c:set var="review" value="${reviews.rows[0]}" />
+					<c:choose>
+						<c:when test="${ empty users }">
+                No Regestered Users :(
+                <br>
+							<br>
+						</c:when>
+						<c:otherwise>
+							<strong>Menage users:</strong>
+							<form method="post" action="adminpanel.jsp?site=add_user">
+								<strong>Add new User:</strong>
+								<p>Name:<input type="text" name="name" size="3"></p>
+						        <p>Email:<input type="text" name="email" size="20"></p>
+						        <p>Password:<input type="password" name="pass" size="20"></p>
+						        <p><input type="submit" value="submit" name="login"></p>
+						    </form>
+						    <hr>
+							<strong>List of all users:</strong>
+							<table>
+								<c:forEach var="row" items="${users.rowsByIndex}">
+									<tr> 
+						 			<td><c:out value="${row[1]}"/></td> 
+						 			<td><form action="admin_edit_user.jsp">
+						 				<input type="hidden" name="uid" value="${row[0]}">
+						 				<input type="submit" value="Edit!">
+						 			</form></td></tr>
+						 			<tr> 
+						 			<td><c:out value="${row[1]}"/> | <c:out value="${row[4]}"/></td> 
+						 			<td><form action="adminpanel.jsp?site=delete_user">
+						 				<input type="hidden" name="uid" value="${row[0]}">
+						 				<input type="submit" value="Delete!">
+						 			</form></td></tr>
+						    </c:forEach>
+							</table>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
+				</c:when>
+
+				<c:when test="${param.site== 'add_user'}">
+					<sql:transaction dataSource="jdbc/lut2">
+					    <sql:update var="count">
+					        INSERT INTO users VALUES ('${param.name}','${param.pass}' , NULL, ,'${param.email}', NULL,'${param.key}')
+					    </sql:update>
+					</sql:transaction>
+					User added!
+				</c:when>
+
+				<c:when test="${param.site== 'delete_user}">
+					<sql:transaction dataSource="jdbc/lut2">
+						<sql:update var="count">
+					    	DELETE FROM users WHERE user_id='${param.uid}'
+					    </sql:update>
+					</sql:transaction>
+					User deleted!
+				</c:when>
+
+				<c:when test="${param.site== 'delete_review'}">
+
+					<sql:transaction dataSource="jdbc/lut2">
+						<sql:update var="count">
+    	DELETE FROM user_reviews WHERE school_id='${param.review_sid}' AND user_id='${param.review_iud}' AND review='${param.review_rev}'
+    </sql:update>
+					</sql:transaction>
+Review deleted!
+				</c:when>
 
 				<c:otherwise>
 Specified Site not found. :(
