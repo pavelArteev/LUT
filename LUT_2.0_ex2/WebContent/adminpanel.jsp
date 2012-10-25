@@ -295,6 +295,12 @@ Review deleted!
 				</c:when>
 
 				<c:when test="${param.site== 'delete_country'}">
+				
+					<sql:transaction dataSource="jdbc/lut2">
+    					<sql:update var="count">
+    	DELETE FROM user_reviews WHERE school_id = (SELECT school_id FROM school WHERE country ='${param.country_sh}' )
+    					</sql:update>
+					</sql:transaction>
 
 					<sql:transaction dataSource="jdbc/lut2">
 						<sql:update var="count">
