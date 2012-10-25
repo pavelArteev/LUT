@@ -75,7 +75,7 @@
 
 	<sql:transaction dataSource="jdbc/lut2">
 	<sql:update>
-    	UPDATE  users SET password = '<%=hash_pass%>', user_key='321' WHERE user_key='<%=key%>'
+    	UPDATE  users SET password = '<%=hash_pass%>', user_key='' WHERE user_key='<%=key%>'
     </sql:update>
 	</sql:transaction>
 	
