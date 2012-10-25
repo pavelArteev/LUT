@@ -346,7 +346,7 @@ Country added!
 											type="hidden" name="password" value="<%=password%>" /> 
 								<p>Name:<input type="text" name="name" size="3"></p>
 						        <p>Email:<input type="text" name="email" size="20"></p>
-						        <p>Password:<input type="userpassword" name="pass" size="20"></p>
+						        <p>Password:<input type="password" name="pass" size="20"></p>
 						        <p><input type="submit" value="submit"></p>
 						    </form>
 						    <hr>
