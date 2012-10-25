@@ -11,13 +11,10 @@
 	String user = request.getParameter("username");
 	String password = request.getParameter("password");
 	String site = request.getParameter("site");
-	String pass = request.getParameter("pass");
+	String p_hash = "";
 
 	String pw_hash = Security_functions
 			.i_can_haz_salty_md5sum(password);
-
-	String p_hash = Security_functions
-			.i_can_haz_salty_md5sum(pass);
 %>
 
 <sql:query var="users" dataSource="jdbc/lut2">
@@ -379,9 +376,13 @@ Country added!
 				</c:when>
 
 				<c:when test="${param.site== 'add_user'}">
+				<%
+					p_hash = Security_functions
+						.i_can_haz_salty_md5sum(request.getParameter("pass"));
+				%>
 					<sql:transaction dataSource="jdbc/lut2">
 					    <sql:update var="count">
-					        INSERT INTO users (name, password, session_id, email, ip, user_key) VALUES ('${param.name}','${p_hash}' , NULL, '${param.email}', NULL,'${param.key}')
+					        INSERT INTO users (name, password, session_id, email, ip, user_key) VALUES ('${param.name}','<%=p_hash %>' , NULL, '${param.email}', NULL,'${param.key}')
 					    </sql:update>
 					</sql:transaction>
 					User added!
@@ -418,10 +419,14 @@ Country added!
 				</c:when>
 
 				<c:when test="${param.site== 'update_user'}">
+				<%
+					p_hash = Security_functions
+						.i_can_haz_salty_md5sum(request.getParameter("pass"));
+				%>
 					<sql:transaction dataSource="jdbc/lut2">
 						<sql:update var="count">
 					    	UPDATE users
-							SET name='${param.name}', password='${p_hash}', email='${param.email}'
+							SET name='${param.name}', password='<%=p_hash %>', email='${param.email}'
 							WHERE uid='${param.uid}'
 					    </sql:update>
 
