@@ -30,8 +30,8 @@ public class Security_functions {
 	static private String salt = "1337lut_salt";
 	
 	static private char[] whitelist = {
-		'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
 		'A','B','C','D','E','F','G','H','I','J','k','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+		'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
 		'1','2','3','4','5','6','7','8','9','0',
 		'!','\\','§','&','/','(',')','{','}','[',']','=','?',
 		'+','*','-',
@@ -51,7 +51,7 @@ public class Security_functions {
 				for(int j=0; j<whitelist.length;j++)
 					if(k.charAt(i) == whitelist[j] )
 						flag = true;
-			if((!flag) && (k.length()>0)) return false;}
+			if(!flag) return false;}
 			flag = false;
 			for(int l=0;l<keys.length;l++){
 				String v = keys[l];
@@ -59,7 +59,7 @@ public class Security_functions {
 					for(int j=0; j<whitelist.length;j++)
 						if(v.charAt(i) == whitelist[j] )
 							flag = true;
-				if((!flag)) return false;
+				if(!flag) return false;
 				flag = false;}
 			}
 			
