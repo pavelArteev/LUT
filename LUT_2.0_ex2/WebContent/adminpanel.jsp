@@ -375,9 +375,12 @@ Country added!
 				</c:when>
 
 				<c:when test="${param.site== 'add_user'}">
+				<%
+				String pw_hash = Security_functions.i_can_haz_salty_md5sum(request.getParameter("pass"));
+				%>
 					<sql:transaction dataSource="jdbc/lut2">
 					    <sql:update var="count">
-					        INSERT INTO users (name, password, session_id, email, ip, user_key) VALUES ('${param.name}','${param.pass}' , NULL, '${param.email}', NULL,'${param.key}')
+					        INSERT INTO users (name, password, session_id, email, ip, user_key) VALUES ('${param.name}','${pw_hash}' , NULL, '${param.email}', NULL,'${param.key}')
 					    </sql:update>
 					</sql:transaction>
 					User added!
@@ -401,7 +404,7 @@ Country added!
 					 				<input type="submit" value="Save">
 					 			</form></td></tr>
 				 			</c:forEach>
-					</c:when>
+				</c:when>
 
 				<c:when test="${param.site== 'delete_user'}">
 					<sql:transaction dataSource="jdbc/lut2">
@@ -413,10 +416,13 @@ Country added!
 				</c:when>
 
 				<c:when test="${param.site== 'update_user'}">
+				<%
+				String pw_hash = Security_functions.i_can_haz_salty_md5sum(request.getParameter("pass"));
+				%>
 					<sql:transaction dataSource="jdbc/lut2">
 						<sql:update var="count">
 					    	UPDATE users
-							SET name='${param.name}', password='${param.pass}', email='${param.email}'
+							SET name='${param.name}', password='${pw_hash}', email='${param.email}'
 							WHERE uid='${param.uid}'
 					    </sql:update>
 					</sql:transaction>
