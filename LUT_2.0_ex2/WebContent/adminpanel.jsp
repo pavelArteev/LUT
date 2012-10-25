@@ -397,9 +397,9 @@ Country added!
 								<tr> 
 								<small>note: you must enter values into all fields or you might break the user account!</small>
 					 			<td><form method="post" action="adminpanel.jsp?site=update_user">
-					 				<input type="hidden" name="uid" value="${userDetails[0]}">
-					 				Name:<input type="text" name="name" value="${userDetails[1]}"><br>
-					 				Email:<input type="text" name="email" value="${userDetails[4]}"><br>
+					 				<input type="hidden" name="uid" value="${param.uid}">
+					 				Name:<input type="text" name="name" value=""><br>
+					 				Email:<input type="text" name="email" value=""><br>
 					 				Pass:<input type="password" name="pass" value="">
 					 				<input type="submit" value="Save">
 					 			</form></td></tr>
@@ -424,7 +424,7 @@ Country added!
 							SET name='${param.name}', password='${pw_hash}', email='${param.email}'
 							WHERE uid='${param.uid}'
 					    </sql:update>
-					    
+
 					</sql:transaction>
 					User updated!
 				</c:when>
