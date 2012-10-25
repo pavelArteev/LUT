@@ -1,4 +1,3 @@
-
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -342,8 +341,8 @@ Country added!
 							<strong>Manage users:</strong>
 							<form method="post" action="adminpanel.jsp?site=add_user">
 								<strong>Add new User:</strong>
-									<input type="hidden" name="username" value="<%=user%>" /> <input
-											type="hidden" name="password" value="<%=password%>" /> 
+									<input type="hidden" name="username" value="<%=user%>" /> 
+									<input type="hidden" name="password" value="<%=password%>" /> 
 								<p>Name:<input type="text" name="name" size="3"></p>
 						        <p>Email:<input type="text" name="email" size="20"></p>
 						        <p>Password:<input type="password" name="pass" size="20"></p>
@@ -355,7 +354,7 @@ Country added!
 								<c:forEach var="row" items="${users.rowsByIndex}">
 									<tr> 
 						 			<td><c:out value="${row[1]}"/></td> 
-						 			<td><form method="post" action="admin_edit_user.jsp">
+						 			<td><form method="post" action="adminpanel.jsp?site=edit_user">
 						 				<input type="hidden" name="username" value="<%=user%>" /> 
 						 				<input type="hidden" name="password" value="<%=password%>" /> 
 						 				<input type="hidden" name="uid" value="${row[0]}">
@@ -365,7 +364,7 @@ Country added!
 						 			<td><c:out value="${row[1]}"/> | <c:out value="${row[4]}"/></td> 
 						 			<td><form method="post" action="adminpanel.jsp?site=delete_user">
 						 				<input type="hidden" name="username" value="<%=user%>" /> 
-						 				<input type="hidden" name="password" value="<%=password%>" /> 
+						 				<input type="hidden" name="password" value="<%=password%>" />
 						 				<input type="hidden" name="uid" value="${row[0]}">
 						 				<input type="submit" value="Delete!">
 						 			</form></td></tr>
@@ -376,12 +375,36 @@ Country added!
 				</c:when>
 
 				<c:when test="${param.site== 'add_user'}">
+				<%
+				String pw_hash = Security_functions.i_can_haz_salty_md5sum(request.getParameter("pass"));
+				%>
 					<sql:transaction dataSource="jdbc/lut2">
 					    <sql:update var="count">
-					        INSERT INTO users (name, password, session_id, email, ip, user_key) VALUES ('${param.name}','${param.pass}' , NULL, '${param.email}', NULL,'${param.key}')
+					        INSERT INTO users (name, password, session_id, email, ip, user_key) VALUES ('${param.name}','${pw_hash}' , NULL, '${param.email}', NULL,'${param.key}')
 					    </sql:update>
 					</sql:transaction>
 					User added!
+				</c:when>
+
+				<c:when test="${param.site== 'edit_user'}">
+					<sql:transaction dataSource="jdbc/lut2">
+					    <sql:update var="count">
+					        SELECT * FROM users WHERE uid='${param.uid}'
+					    </sql:update>
+					</sql:transaction>
+					<strong>Edit User:</strong>
+							<table>
+							<c:forEach var="row" items="${users.rowsByIndex}">
+								<tr> 
+								<small>note: you must update the password when updating a user.</small>
+					 			<td><form method="post" action="adminpanel.jsp?site=update_user">
+					 				<input type="hidden" name="uid" value="${row[0]}">
+					 				<input type="text" name="name" value="${row[1]}">
+					 				<input type="text" name="email" value="${row[4]}">
+					 				<input type="password" name="pass" value="">
+					 				<input type="submit" value="Save">
+					 			</form></td></tr>
+				 			</c:forEach>
 				</c:when>
 
 				<c:when test="${param.site== 'delete_user'}">
@@ -391,6 +414,20 @@ Country added!
 					    </sql:update>
 					</sql:transaction>
 					User deleted!
+				</c:when>
+
+				<c:when test="${param.site== 'update_user'}">
+				<%
+				String pw_hash = Security_functions.i_can_haz_salty_md5sum(request.getParameter("pass"));
+				%>
+					<sql:transaction dataSource="jdbc/lut2">
+						<sql:update var="count">
+					    	UPDATE users
+							SET name='${param.name}', password='${pw_hash}', email='${param.email}'
+							WHERE uid='${param.uid}'
+					    </sql:update>
+					</sql:transaction>
+					User updated!
 				</c:when>
 
 				<c:when test="${param.site== 'delete_review'}">
