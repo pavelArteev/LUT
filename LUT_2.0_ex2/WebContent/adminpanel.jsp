@@ -397,7 +397,7 @@ Country added!
 					<strong>Edit User:</strong>
 							<table>
 								<tr> 
-								<small>note: you must enter values into all fields or you might break the user account!</small>
+								<small>note: you must enter username and email. If password is blank it will not be changed!</small>
 					 			<td><form method="post" action="adminpanel.jsp?site=update_user">
 					 				<input type="hidden" name="username" value="<%=user%>" />
 									<input type="hidden" name="password" value="<%=password%>" />
@@ -419,18 +419,30 @@ Country added!
 				</c:when>
 
 				<c:when test="${param.site== 'update_user'}">
-				<%
-					p_hash = Security_functions
-						.i_can_haz_salty_md5sum(request.getParameter("pass"));
-				%>
-					<sql:transaction dataSource="jdbc/lut2">
-						<sql:update var="count">
-					    	UPDATE users
-							SET name='${param.name}', password='<%=p_hash %>', email='${param.email}'
-							WHERE uid='${param.uid}'
-					    </sql:update>
-
-					</sql:transaction>
+					<c:choose>
+					<c:when test="${empty param.pass}">
+						<sql:transaction dataSource="jdbc/lut2">
+							<sql:update var="count">
+						    	UPDATE users
+								SET name='${param.name}', email='${param.email}'
+								WHERE uid='${param.uid}'
+						    </sql:update>
+						</sql:transaction>
+					</c:when>
+					<c:otherwise>
+						<%
+							p_hash = Security_functions
+								.i_can_haz_salty_md5sum(request.getParameter("pass"));
+						%>
+						<sql:transaction dataSource="jdbc/lut2">
+							<sql:update var="count">
+						    	UPDATE users
+								SET name='${param.name}', password='<%=p_hash %>', email='${param.email}'
+								WHERE uid='${param.uid}'
+						    </sql:update>
+						</sql:transaction>
+					</c:otherwise>
+				</c:choose>
 					User updated!
 				</c:when>
 
