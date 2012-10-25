@@ -17,12 +17,12 @@
    }else{
 	boolean post = false;
 	boolean addToDataBase = false;
- 	String uname ="pablo";
-	String pw1 ="123";
- 	String pw2 ="123";
+ 	String uname ="";
+	String pw1 ="";
+ 	String pw2 ="";
  	String pw_hash = "";
-	String mail1 ="pavel.arteev@gmail.com";
-	String mail2 ="pavel.arteev@gmail.com";
+	String mail1 ="";
+	String mail2 ="";
 	String A = "test";
             
 	if ("POST".equalsIgnoreCase(request.getMethod())) {
