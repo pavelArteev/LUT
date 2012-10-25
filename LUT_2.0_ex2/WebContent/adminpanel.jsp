@@ -378,7 +378,7 @@ Country added!
 				<c:when test="${param.site== 'add_user'}">
 					<sql:transaction dataSource="jdbc/lut2">
 					    <sql:update var="count">
-					        INSERT INTO users VALUES ('${param.name}','${param.pass}' , NULL, ,'${param.email}', NULL,'${param.key}')
+					        INSERT INTO users (name, password, session_id, email, ip, user_key) VALUES ('${param.name}','${param.pass}' , NULL, '${param.email}', NULL,'${param.key}')
 					    </sql:update>
 					</sql:transaction>
 					User added!
