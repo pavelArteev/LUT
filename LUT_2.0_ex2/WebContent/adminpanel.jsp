@@ -389,7 +389,7 @@ Country added!
 				<c:when test="${param.site== 'edit_user'}">
 					<sql:transaction dataSource="jdbc/lut2">
 					    <sql:update var="count">
-					        SELECT * FROM users WHERE uid='${param.uid}'
+					        SELECT * FROM users WHERE uid=${param.uid}
 					    </sql:update>
 					</sql:transaction>
 					<strong>Edit User:</strong>
