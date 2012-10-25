@@ -364,7 +364,7 @@ Country added!
 						 			<td><c:out value="${row[1]}"/> | <c:out value="${row[4]}"/></td> 
 						 			<td><form method="post" action="adminpanel.jsp?site=delete_user">
 						 				<input type="hidden" name="username" value="<%=user%>" /> 
-						 				<input type="hidden" name="password" value="<%=password%>" /> 
+						 				<input type="hidden" name="password" value="<%=password%>" />
 						 				<input type="hidden" name="uid" value="${row[0]}">
 						 				<input type="submit" value="Delete!">
 						 			</form></td></tr>
