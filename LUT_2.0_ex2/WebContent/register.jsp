@@ -42,7 +42,8 @@
 <c:when test="${postVal == true}">
 <sql:query var="users" dataSource="jdbc/lut2">
 				SELECT * FROM users
-				WHERE  name = '<%=uname%>'
+				WHERE  name = '<%=uname%>' OR
+				email = '<%= mail1%>'
 		</sql:query>
 		<c:set var="userDetails" value="${users.rows[0]}"/>            
 </c:when>   
