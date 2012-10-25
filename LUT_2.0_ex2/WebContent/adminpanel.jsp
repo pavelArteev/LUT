@@ -355,17 +355,17 @@ Country added!
 								<c:forEach var="row" items="${users.rowsByIndex}">
 									<tr> 
 						 			<td><c:out value="${row[1]}"/></td> 
-						 			<td><form action="admin_edit_user.jsp">
-						 				<input type="hidden" name="username" value="<%=user%>" /> <input
-											type="hidden" name="password" value="<%=password%>" /> 
+						 			<td><form method="post" action="admin_edit_user.jsp">
+						 				<input type="hidden" name="username" value="<%=user%>" /> 
+						 				<input type="hidden" name="password" value="<%=password%>" /> 
 						 				<input type="hidden" name="uid" value="${row[0]}">
 						 				<input type="submit" value="Edit!">
 						 			</form></td></tr>
 						 			<tr> 
 						 			<td><c:out value="${row[1]}"/> | <c:out value="${row[4]}"/></td> 
-						 			<td><form action="adminpanel.jsp?site=delete_user">
-						 				<input type="hidden" name="username" value="<%=user%>" /> <input
-											type="hidden" name="password" value="<%=password%>" /> 
+						 			<td><form method="post" action="adminpanel.jsp?site=delete_user">
+						 				<input type="hidden" name="username" value="<%=user%>" /> 
+						 				<input type="hidden" name="password" value="<%=password%>" /> 
 						 				<input type="hidden" name="uid" value="${row[0]}">
 						 				<input type="submit" value="Delete!">
 						 			</form></td></tr>
@@ -387,7 +387,7 @@ Country added!
 				<c:when test="${param.site== 'delete_user'}">
 					<sql:transaction dataSource="jdbc/lut2">
 						<sql:update var="count">
-					    	DELETE FROM users WHERE user_id='${param.uid}'
+					    	DELETE FROM users WHERE uid='${param.uid}'
 					    </sql:update>
 					</sql:transaction>
 					User deleted!
