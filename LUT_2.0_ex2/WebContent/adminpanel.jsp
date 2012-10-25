@@ -356,11 +356,15 @@ Country added!
 						 			<td><c:out value="${row[1]}"/></td> 
 						 			<td><form method="post" action="adminpanel.jsp?site=edit_user">
 						 				<input type="hidden" name="username" value="<%=user%>" /> 
+										<input type="hidden" name="password" value="<%=password%>" /> 
+						 				<input type="hidden" name="username" value="<%=user%>" /> 
 						 				<input type="hidden" name="password" value="<%=password%>" /> 
 						 				<input type="hidden" name="uid" value="${row[0]}">
 						 				<input type="submit" value="Edit!">
 						 			</form></td>
 						 			<td><form method="post" action="adminpanel.jsp?site=delete_user">
+						 				<input type="hidden" name="username" value="<%=user%>" /> 
+										<input type="hidden" name="password" value="<%=password%>" /> 
 						 				<input type="hidden" name="username" value="<%=user%>" /> 
 						 				<input type="hidden" name="password" value="<%=password%>" />
 						 				<input type="hidden" name="uid" value="${row[0]}">
@@ -397,6 +401,8 @@ Country added!
 								<tr> 
 								<small>note: you must enter values into all fields or you might break the user account!</small>
 					 			<td><form method="post" action="adminpanel.jsp?site=update_user">
+					 				<input type="hidden" name="username" value="<%=user%>" /> 
+									<input type="hidden" name="password" value="<%=password%>" /> 
 					 				<input type="hidden" name="uid" value="${param.uid}">
 					 				Name:<input type="text" name="name" value=""><br>
 					 				Email:<input type="text" name="email" value=""><br>
