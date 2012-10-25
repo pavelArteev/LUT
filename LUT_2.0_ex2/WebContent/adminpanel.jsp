@@ -346,7 +346,7 @@ Country added!
 											type="hidden" name="password" value="<%=password%>" /> 
 								<p>Name:<input type="text" name="name" size="3"></p>
 						        <p>Email:<input type="text" name="email" size="20"></p>
-						        <p>Password:<input type="userpassword" name="pass" size="20"></p>
+						        <p>Password:<input type="password" name="pass" size="20"></p>
 						        <p><input type="submit" value="submit"></p>
 						    </form>
 						    <hr>
@@ -355,17 +355,17 @@ Country added!
 								<c:forEach var="row" items="${users.rowsByIndex}">
 									<tr> 
 						 			<td><c:out value="${row[1]}"/></td> 
-						 			<td><form action="admin_edit_user.jsp">
-						 				<input type="hidden" name="username" value="<%=user%>" /> <input
-											type="hidden" name="password" value="<%=password%>" /> 
+						 			<td><form method="post" action="admin_edit_user.jsp">
+						 				<input type="hidden" name="username" value="<%=user%>" /> 
+						 				<input type="hidden" name="password" value="<%=password%>" /> 
 						 				<input type="hidden" name="uid" value="${row[0]}">
 						 				<input type="submit" value="Edit!">
 						 			</form></td></tr>
 						 			<tr> 
 						 			<td><c:out value="${row[1]}"/> | <c:out value="${row[4]}"/></td> 
-						 			<td><form action="adminpanel.jsp?site=delete_user">
-						 				<input type="hidden" name="username" value="<%=user%>" /> <input
-											type="hidden" name="password" value="<%=password%>" /> 
+						 			<td><form method="post" action="adminpanel.jsp?site=delete_user">
+						 				<input type="hidden" name="username" value="<%=user%>" /> 
+						 				<input type="hidden" name="password" value="<%=password%>" /> 
 						 				<input type="hidden" name="uid" value="${row[0]}">
 						 				<input type="submit" value="Delete!">
 						 			</form></td></tr>
@@ -378,7 +378,7 @@ Country added!
 				<c:when test="${param.site== 'add_user'}">
 					<sql:transaction dataSource="jdbc/lut2">
 					    <sql:update var="count">
-					        INSERT INTO users VALUES ('${param.name}','${param.pass}' , NULL, ,'${param.email}', NULL,'${param.key}')
+					        INSERT INTO users (name, password, session_id, email, ip, user_key) VALUES ('${param.name}','${param.pass}' , NULL, '${param.email}', NULL,'${param.key}')
 					    </sql:update>
 					</sql:transaction>
 					User added!
@@ -387,7 +387,7 @@ Country added!
 				<c:when test="${param.site== 'delete_user'}">
 					<sql:transaction dataSource="jdbc/lut2">
 						<sql:update var="count">
-					    	DELETE FROM users WHERE user_id='${param.uid}'
+					    	DELETE FROM users WHERE uid='${param.uid}'
 					    </sql:update>
 					</sql:transaction>
 					User deleted!
