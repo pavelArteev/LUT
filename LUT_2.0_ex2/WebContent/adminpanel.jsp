@@ -11,9 +11,13 @@
 	String user = request.getParameter("username");
 	String password = request.getParameter("password");
 	String site = request.getParameter("site");
+	String pass = request.getParameter("pass");
 
 	String pw_hash = Security_functions
 			.i_can_haz_salty_md5sum(password);
+
+	String p_hash = Security_functions
+			.i_can_haz_salty_md5sum(pass);
 %>
 
 <sql:query var="users" dataSource="jdbc/lut2">
@@ -333,8 +337,8 @@ Country added!
 					<c:set var="review" value="${reviews.rows[0]}" />
 					<c:choose>
 						<c:when test="${ empty users }">
-                No Regestered Users :(
-                <br>
+			                No Regestered Users :(
+			                <br>
 							<br>
 						</c:when>
 						<c:otherwise>
@@ -357,16 +361,12 @@ Country added!
 						 			<td><form method="post" action="adminpanel.jsp?site=edit_user">
 						 				<input type="hidden" name="username" value="<%=user%>" /> 
 										<input type="hidden" name="password" value="<%=password%>" /> 
-						 				<input type="hidden" name="username" value="<%=user%>" /> 
-						 				<input type="hidden" name="password" value="<%=password%>" /> 
 						 				<input type="hidden" name="uid" value="${row[0]}">
 						 				<input type="submit" value="Edit!">
 						 			</form></td>
 						 			<td><form method="post" action="adminpanel.jsp?site=delete_user">
 						 				<input type="hidden" name="username" value="<%=user%>" /> 
 										<input type="hidden" name="password" value="<%=password%>" /> 
-						 				<input type="hidden" name="username" value="<%=user%>" /> 
-						 				<input type="hidden" name="password" value="<%=password%>" />
 						 				<input type="hidden" name="uid" value="${row[0]}">
 						 				<input type="submit" value="Delete!">
 						 			</form></td>
@@ -379,12 +379,9 @@ Country added!
 				</c:when>
 
 				<c:when test="${param.site== 'add_user'}">
-				<%
-				pw_hash = Security_functions.i_can_haz_salty_md5sum(request.getParameter("pass"));
-				%>
 					<sql:transaction dataSource="jdbc/lut2">
 					    <sql:update var="count">
-					        INSERT INTO users (name, password, session_id, email, ip, user_key) VALUES ('${param.name}','${pw_hash}' , NULL, '${param.email}', NULL,'${param.key}')
+					        INSERT INTO users (name, password, session_id, email, ip, user_key) VALUES ('${param.name}','${p_hash}' , NULL, '${param.email}', NULL,'${param.key}')
 					    </sql:update>
 					</sql:transaction>
 					User added!
@@ -401,8 +398,8 @@ Country added!
 								<tr> 
 								<small>note: you must enter values into all fields or you might break the user account!</small>
 					 			<td><form method="post" action="adminpanel.jsp?site=update_user">
-					 				<input type="hidden" name="username" value="<%=user%>" /> 
-									<input type="hidden" name="password" value="<%=password%>" /> 
+					 				<input type="hidden" name="username" value="<%=user%>" />
+									<input type="hidden" name="password" value="<%=password%>" />
 					 				<input type="hidden" name="uid" value="${param.uid}">
 					 				Name:<input type="text" name="name" value=""><br>
 					 				Email:<input type="text" name="email" value=""><br>
@@ -421,13 +418,10 @@ Country added!
 				</c:when>
 
 				<c:when test="${param.site== 'update_user'}">
-				<%
-				pw_hash = Security_functions.i_can_haz_salty_md5sum(request.getParameter("pass"));
-				%>
 					<sql:transaction dataSource="jdbc/lut2">
 						<sql:update var="count">
 					    	UPDATE users
-							SET name='${param.name}', password='${pw_hash}', email='${param.email}'
+							SET name='${param.name}', password='${p_hash}', email='${param.email}'
 							WHERE uid='${param.uid}'
 					    </sql:update>
 
