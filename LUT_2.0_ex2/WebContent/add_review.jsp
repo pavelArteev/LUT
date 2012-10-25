@@ -45,7 +45,7 @@
 		<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="refresh" content="5;url=schools.jsp">
+<meta http-equiv="refresh" content="5;url=countries.jsp">
 <link rel="stylesheet" type="text/css" href="lutstyle.css">
 <title>Review added!</title>
 </head>
