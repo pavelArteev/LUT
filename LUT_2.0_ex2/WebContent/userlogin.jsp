@@ -34,7 +34,7 @@ String pw_hash = Security_functions.i_can_haz_salty_md5sum(password);
 </head>
 <body>
 <c:choose>
-            <c:when test="${empty userDetails}">
+            <c:when test="${empty userDetails or userDetails.user_key != ''}">
                 <h1>Login failed</h1>
                 <table>
             <thead>

@@ -1,9 +1,10 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
-<%@ page import="java.io.*,java.util.*,javax.mail.*"%>
+<%@ page import="java.io.*,java.util.*,javax.mail.*, javax.naming.*, com.sun.mail.smtp.*"%>
 <%@ page import="javax.mail.internet.*,javax.activation.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
+<%@ page import="javax.annotation.Resource" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -15,26 +16,16 @@
    if(! Security_functions.check_input(request.getParameterMap())){
 	   response.setHeader("Refresh", "0; URL=badinput.jsp");
    }else{
-    String uid = "";
-    String key = "";
-	String pw1 ="";
- 	String pw2 ="";
-    String rst = "";
+	String key = "";
     boolean post = false;
-            
-
-    if ("POST".equalsIgnoreCase(request.getMethod())) {
-        post = true;
-        pw1 = request.getParameter("pass1");
-        pw2 = request.getParameter("pass2");
-    }
-    rst = request.getParameter("rst");
-    uid = request.getParameter("uid");
+         
     key = request.getParameter("key");
+	if (key != null) {
+        post = true;
+        
+    }
+%>   
 
-%>         
-            
-            
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <link rel="stylesheet" type="text/css" href="lutstyle.css">
@@ -42,65 +33,41 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="lutstyle.css">
-        <% if (rst.contentEquals("0")){
-            out.print("<title>Verify Account - Set Password</title>");
-        }else{
-            out.print("<title>Reset Password</title>");
-        }
-        %>
+
     </head>
-<body>
- <table border="0">
-    <thead>
-        <tr>
-            <th>Enter your new password below</th>
-        </tr>
-    </thead>
-    <tbody>
-            
+ 
+<c:set var="postVal" value = "<%=post%>"/>
+<c:choose>
+<c:when test="${postVal == true}">
+		<sql:query var="users" dataSource="jdbc/lut2">
+				SELECT * FROM users
+				WHERE  user_key = '<%=key%>'
+		</sql:query>
+		<c:set var="userDetails" value="${users.rows[0]}"/>         
+</c:when>   
+</c:choose>        
+ 
+ <body>   
+<c:choose>
+<c:when test="${empty userDetails}">
+403 Forbiden !
 <%
-    //Verify the POST data 
-    if (!(uid.contentEquals("") || key.contentEquals(""))) {
-        //Verify good referral link
-        if(post && !pw1.contentEquals("") && !pw2.contentEquals("") && !pw1.contentEquals(pw2)){
-            out.print("<tr><td><h3>Passwords do not match! Try again!</h3></tr></td>");
-            passwordForm(uid, key);
-        }else if(pw1.contentEquals(pw2)){
-            //Set new password and remove key from database
-            //GET * FROM users WHERE uid = "$uid" AND key = "$key"
-
-            //IF empty 
-            // out.print("<tr><td><h3>FAIL :(</h3></tr></td>");
-            //Else
-            //INSERT pass1 into password WHERE uid = "$uid" AND key = "$key"
-            out.print("<tr><td><h3>Success!</h3></tr></td>");
-        }else{
-            passwordForm(uid, key);
-        }
-    }else{
-        out.print("<h1>Invalid Verification Link!</h1>");
-    }
+response.setHeader("Refresh", "3; URL=index.jsp");
 %>
-
-        <td><a href="index.jsp">Back to main page</a></td>
-    </tbody>
-</table>
-
+</c:when>
+<c:otherwise>
+Account registered! =)
+<sql:transaction dataSource="jdbc/lut2">
+	<sql:update>
+    	UPDATE  users SET user_key = '' WHERE user_key='<%=key%>'
+    </sql:update>
+</sql:transaction>
+<%
+response.setHeader("Refresh", "3; URL=index.jsp");
+%>
+</c:otherwise>
+</c:choose>    
 </body>
-</html>
+</html>    
 
-<%!
-String passwordForm(String uid, String key) {
-	return "<tr>" +
-		     "<td><form method='post' action='verify.jsp?uid="+uid+"&key="+key+"'>" +
-	            "<p>Password:<input type='password' name='pass1' size='20'></p>"+
-	            "<p></p>"+
-	            "<p>Retype Password:<input type='password' name='pass2' size='20'></p>"+
-	            "<p></p>"+             
-	            "<p><input type='submit' value='submit' name='login'></p>"+
-	                "</form>"+
-	            "</td>"+
-	        "</tr>";
-}
-%>
-<% } %>
+<%} %>

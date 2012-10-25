@@ -15,16 +15,15 @@
    if(! Security_functions.check_input(request.getParameterMap())){
 	   response.setHeader("Refresh", "0; URL=badinput.jsp");
    }else{
-	boolean user = false;
-	boolean password = false;
-	boolean mail = false;
-	boolean captcha = false;
 	boolean post = false;
-	String uname ="";
-	String pw1 ="";
- 	String pw2 ="";
-	String mail1 ="";
-	String mail2 ="";
+	boolean addToDataBase = false;
+ 	String uname ="pablo";
+	String pw1 ="123";
+ 	String pw2 ="123";
+ 	String pw_hash = "";
+	String mail1 ="pavel.arteev@gmail.com";
+	String mail2 ="pavel.arteev@gmail.com";
+	String A = "test";
             
 	if ("POST".equalsIgnoreCase(request.getMethod())) {
 		post = true;
@@ -36,7 +35,18 @@
 	}
 	String randKey = UUID.randomUUID().toString();
 %>          
-            
+
+
+<c:set var="postVal" value = "<%=post%>"/>
+<c:choose>
+<c:when test="${postVal == true}">
+<sql:query var="users" dataSource="jdbc/lut2">
+				SELECT * FROM users
+				WHERE  name = '<%=uname%>'
+		</sql:query>
+		<c:set var="userDetails" value="${users.rows[0]}"/>            
+</c:when>   
+</c:choose>        
             
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -49,8 +59,12 @@
     </head>
 <body>
    <h1>Hi student!</h1>
-   
-   <%
+
+
+
+<c:choose>
+	<c:when test="${empty userDetails}">
+	<%
 	//Verify the POST data 
 	if (post) {
 		if(uname.contentEquals("")){
@@ -66,35 +80,56 @@
 		}else if(!mail1.contentEquals(mail2)){
 			out.print("Second email different from the first");
 		}else{
-			// Adding User to Table 
-			//TODO also we must to add verification if we have no the same username or email
-			// then add user to temp db and send to him email with confirmation
-            //out.print(randKey);
-			//out.print(uname+pw1+pw2+mail1+mail2);
-            int uid = 1;
-
-            //INSERT INTO users email, encripted(pass), key
-           
-
-            //Get server info for email:
+			//Get server info for email:
             String serverURL = request.getScheme().toString() + "://" + request.getServerName().toString() + ":" + String.valueOf(request.getServerPort()) + "/" + 
                 request.getContextPath().toString();
-            String verifyURL = serverURL + "/verify.jsp?user=" + uid + "&key=" + randKey + "&rst=0";
+            String verifyURL = serverURL + "/verify.jsp?user=" + uname + "&key=" + randKey + "&rst=0";
 
             String verificationMessage = "Welcome to LUT, \n Click the following link or copy it in your browser to verify your email: "+ verifyURL;
             
             out.println("Trying to send email...");
             
             SendEmail sendEmail = new SendEmail();
-            out.println(sendEmail.sendMessage(mail1, verificationMessage));
+            boolean sendEmailResult = sendEmail.sendMessage(mail1, verificationMessage);
+            
+            if(sendEmailResult){
+            	out.print("Send email - OK Check your email for confirmation =)");
+           		pw_hash = Security_functions.i_can_haz_salty_md5sum(pw1);
+            	addToDataBase = true;
+            }else{
+            	out.print("Send email - Error \n Please try again latter =/"); 
+            	addToDataBase = false;
+            }
             
             response.setHeader("Refresh", "5; URL=index.jsp");
-            
-            return;
-            
- 		}
+       }
    	}
 %>
+</c:when>
+	<c:otherwise>
+	User exist
+	</c:otherwise>   
+</c:choose>
+
+<!-- Temporary adding user to database -->
+<c:set var="atdb" value = "<%=addToDataBase%>"/>
+<c:choose>
+
+<c:when test="${atdb == true}">
+
+
+				
+	<sql:transaction dataSource="jdbc/lut2">
+		<sql:update >
+			INSERT INTO users VALUES (NULL, '<%=uname %>','<%=pw_hash %>' , NULL ,'<%=mail1 %>', NULL,'<%=randKey %>')
+		</sql:update>
+	</sql:transaction>
+</c:when>
+<c:otherwise>
+
+
+
+
         <table border="0">
             <thead>
                 <tr>
@@ -128,6 +163,12 @@
 
 </body>
 </html>
+</c:otherwise>
+</c:choose>
+
+
+
+
 
 
 
@@ -145,7 +186,7 @@
 public class SendEmail{
 	
 	
-	public String sendMessage(String email, String message) {
+	public boolean sendMessage(String email, String message) {
 		String returnResult = "";
 		  
 		try{
@@ -170,9 +211,9 @@ public class SendEmail{
 			// class to send the message
           	Transport.send(emailMessage);
           
-          	return "Send email - OK Check your email for confirmation =)";
+          	return true;
 		 }catch(Exception e){
-			 return "Send email - Error \n Please try again latter =/"; 
+			 return false;
 		 }
 	  }
 }

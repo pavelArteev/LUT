@@ -35,7 +35,7 @@
 <sql:query var="reviews" dataSource="jdbc/lut2">
     SELECT * FROM user_reviews, school
     WHERE user_reviews.school_id = school.school_id
-    AND school.full_name = ? '<sql:param value="${param.school_fullname}'"/>
+    AND school.full_name = '${param.school_fullname}'
 </sql:query>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
