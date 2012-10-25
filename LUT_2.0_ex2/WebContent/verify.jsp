@@ -41,7 +41,7 @@
 <c:when test="${postVal == true}">
 		<sql:query var="users" dataSource="jdbc/lut2">
 				SELECT * FROM users
-				WHERE  user_key = '<%=key%>'
+				WHERE  user_key = '${key}'
 		</sql:query>
 		<c:set var="userDetails" value="${users.rows[0]}"/>         
 </c:when>   
@@ -59,7 +59,7 @@ response.setHeader("Refresh", "3; URL=index.jsp");
 Account registered! =)
 <sql:transaction dataSource="jdbc/lut2">
 	<sql:update>
-    	UPDATE  users SET user_key = '' WHERE user_key='<%=key%>'
+    	UPDATE  users SET user_key = '' WHERE user_key='${key}'
     </sql:update>
 </sql:transaction>
 <%

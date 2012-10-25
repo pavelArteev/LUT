@@ -359,15 +359,15 @@ Country added!
 						 				<input type="hidden" name="password" value="<%=password%>" /> 
 						 				<input type="hidden" name="uid" value="${row[0]}">
 						 				<input type="submit" value="Edit!">
-						 			</form></td></tr>
-						 			<tr> 
-						 			<td><c:out value="${row[1]}"/> | <c:out value="${row[4]}"/></td> 
+						 			</form></td>
 						 			<td><form method="post" action="adminpanel.jsp?site=delete_user">
 						 				<input type="hidden" name="username" value="<%=user%>" /> 
 						 				<input type="hidden" name="password" value="<%=password%>" />
 						 				<input type="hidden" name="uid" value="${row[0]}">
 						 				<input type="submit" value="Delete!">
-						 			</form></td></tr>
+						 			</form></td>
+
+						 		</tr>
 						    </c:forEach>
 							</table>
 						</c:otherwise>
@@ -387,24 +387,22 @@ Country added!
 				</c:when>
 
 				<c:when test="${param.site== 'edit_user'}">
-					<sql:transaction dataSource="jdbc/lut2">
-					    <sql:query var="count">
-					        SELECT * FROM users WHERE uid='${param.uid}'
-					    </sql:query>
-					</sql:transaction>
+					    <sql:query var="users" dataSource="jdbc/lut2">
+								SELECT * FROM users
+								WHERE uid='${param.uid}'
+						</sql:query>
+						<c:set var="userDetails" value="${users.rows[0]}"/>   
 					<strong>Edit User:</strong>
 							<table>
-							<c:forEach var="row" items="${users.rowsByIndex}">
 								<tr> 
-								<small>note: you must update the password when updating a user.</small>
+								<small>note: you must enter values into all fields or you might breat the user account!</small>
 					 			<td><form method="post" action="adminpanel.jsp?site=update_user">
-					 				<input type="hidden" name="uid" value="${row[0]}">
-					 				Name:<input type="text" name="name" value="${row[1]}">
-					 				Email:<input type="text" name="email" value="${row[4]}">
+					 				UID:<input type="text" name="uid" value="${userDetails[0]}">
+					 				Name:<input type="text" name="name" value="${userDetails[1]}">
+					 				Email:<input type="text" name="email" value="${userDetails[4]}">
 					 				Pass:<input type="password" name="pass" value="">
 					 				<input type="submit" value="Save">
 					 			</form></td></tr>
-				 			</c:forEach>
 				</c:when>
 
 				<c:when test="${param.site== 'delete_user'}">
