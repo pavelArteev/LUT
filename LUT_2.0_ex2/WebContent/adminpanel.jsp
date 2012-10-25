@@ -399,9 +399,9 @@ Country added!
 								<small>note: you must update the password when updating a user.</small>
 					 			<td><form method="post" action="adminpanel.jsp?site=update_user">
 					 				<input type="hidden" name="uid" value="${row[0]}">
-					 				<input type="text" name="name" value="${row[1]}">
-					 				<input type="text" name="email" value="${row[4]}">
-					 				<input type="password" name="pass" value="">
+					 				Name:<input type="text" name="name" value="${row[1]}">
+					 				Email:<input type="text" name="email" value="${row[4]}">
+					 				Pass:<input type="password" name="pass" value="">
 					 				<input type="submit" value="Save">
 					 			</form></td></tr>
 				 			</c:forEach>
