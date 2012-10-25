@@ -400,6 +400,7 @@ Country added!
 					 				<input type="password" name="pass" value="${row[2]}">
 					 				<input type="submit" value="Save">
 					 			</form></td></tr>
+				 			</c:forEach>
 					</c:when>
 
 				<c:when test="${param.site== 'delete_user'}">
